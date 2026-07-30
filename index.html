@@ -20,6 +20,17 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
+    <!-- Motion: activa el estado inicial oculto antes del paint (sin flash),
+         y lo omite si el visitante pidió reducir movimiento o no tiene JS -->
+    <script>
+      (function () {
+        try {
+          var reduce = window.matchMedia &&
+            window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          if (!reduce) document.documentElement.classList.add('reveal-ready');
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <!-- Google Tag Manager (noscript) -->
@@ -129,7 +140,7 @@
               <article class="service-card featured-service" id="ppf">
                 <div class="service-media" style="background-image: url('assets/ppf-2.jpg')"></div>
                 <div class="service-content">
-                  <span class="service-label">Servicio foco #1</span>
+                  <span class="service-label">Servicio que recomendamos</span>
                   <h3>PPF · Paint Protection Film</h3>
                   <p>
                     La solución más avanzada para proteger la pintura de tu auto frente a piedras,
@@ -155,7 +166,7 @@
               <article class="service-card featured-service" id="ceramico">
                 <div class="service-media" style="background-image: url('assets/tc.jpg')"></div>
                 <div class="service-content">
-                  <span class="service-label">Servicio foco #2</span>
+                  <span class="service-label">Nuestro servicio más vendido</span>
                   <h3>Tratamientos cerámicos</h3>
                   <p>
                     Brillo, profundidad visual y una capa de protección que hace más simple el
@@ -236,42 +247,28 @@
           </div>
         </section>
 
-        <section class="section section-dark" id="casos">
-          <div class="container">
-            <div class="section-heading">
+        <section class="section section-dark reels-section" id="casos">
+          <div class="container reels-layout">
+            <div class="reels-col reels-col-left">
+              <article class="reel-card">
+                <div class="reel-media">
+                  <video class="reel-video" src="assets/reel-tc.mp4" poster="assets/reel-tc.jpg" muted loop playsinline preload="metadata"></video>
+                </div>
+              </article>
+              <article class="reel-card reel-offset">
+                <div class="reel-media">
+                  <video class="reel-video" src="assets/reel-pulido.mp4" poster="assets/reel-pulido.jpg" muted loop playsinline preload="metadata"></video>
+                </div>
+              </article>
+            </div>
+
+            <div class="reels-center">
               <p class="eyebrow">CASOS REALES</p>
-              <h2>El tipo de evidencia que genera confianza antes de escribir por WhatsApp</h2>
+              <h2>El tipo de evidencia que genera confianza</h2>
               <p>
                 El sitio está pensado para mostrar proceso, terminación y resultados. Menos promesas vacías;
                 más trabajos reales, autos reales y clientes que pueden validar el servicio.
               </p>
-            </div>
-
-            <div class="cases-grid">
-              <article class="case-card">
-                <img src="assets/maverick.jpg" alt="Frente de BMW negro con faros encendidos" />
-                <div class="case-copy">
-                  <h3>Protección premium</h3>
-                  <p>PPF y terminación de alto nivel para preservar pintura, brillo y presencia.</p>
-                </div>
-              </article>
-              <article class="case-card">
-                <img src="assets/kawasaki.jpg" alt="Detalle lateral de auto negro con reflejos" />
-                <div class="case-copy">
-                  <h3>Acabado profundo</h3>
-                  <p>Corrección y tratamiento para devolver profundidad visual y lectura de superficie.</p>
-                </div>
-              </article>
-              <article class="case-card">
-                <img src="assets/golf.jpg" alt="Auto premium en ambiente oscuro de detailing" />
-                <div class="case-copy">
-                  <h3>Mantenimiento de exhibición</h3>
-                  <p>Para clientes que quieren conservar el nivel del vehículo después del tratamiento.</p>
-                </div>
-              </article>
-            </div>
-
-            <div class="center-actions">
               <a
                 class="button button-secondary"
                 href="https://www.instagram.com/jmf.detailing/"
@@ -282,6 +279,19 @@
                 Ver más trabajos en Instagram
               </a>
             </div>
+
+            <div class="reels-col reels-col-right">
+              <article class="reel-card reel-offset">
+                <div class="reel-media">
+                  <video class="reel-video" src="assets/reel-testimonio.mp4" poster="assets/reel-testimonio.jpg" muted loop playsinline preload="metadata"></video>
+                </div>
+              </article>
+              <article class="reel-card">
+                <div class="reel-media">
+                  <video class="reel-video" src="assets/reel-z400.mp4" poster="assets/reel-z400.jpg" muted loop playsinline preload="metadata"></video>
+                </div>
+              </article>
+            </div>
           </div>
         </section>
 
@@ -291,27 +301,39 @@
               <p class="eyebrow">PROCESO DE TRABAJO</p>
               <h2>Claridad, seguimiento y ejecución con obsesión por los detalles</h2>
             </div>
-            <div class="timeline-grid">
-              <article>
-                <span>01</span>
-                <h3>Nos contactás</h3>
-                <p>Ingresás por WhatsApp, Instagram, TikTok o formulario y nos contás tu vehículo y necesidad.</p>
-              </article>
-              <article>
-                <span>02</span>
-                <h3>Evaluamos tu caso</h3>
-                <p>Te orientamos sobre el tratamiento ideal según uso, nivel de protección y objetivo estético.</p>
-              </article>
-              <article>
-                <span>03</span>
-                <h3>Ejecutamos el servicio</h3>
-                <p>Aplicamos técnicas premium con seguimiento real, materiales de calidad y foco absoluto en terminación.</p>
-              </article>
-              <article>
-                <span>04</span>
-                <h3>Entregamos y acompañamos</h3>
-                <p>Explicamos el resultado, recomendaciones de mantenimiento y próximos pasos si tu auto lo necesita.</p>
-              </article>
+            <div class="timeline-vertical">
+              <div class="timeline-item side-left">
+                <span class="timeline-dot"></span>
+                <article>
+                  <span>01</span>
+                  <h3>Nos contactás</h3>
+                  <p>Ingresás por WhatsApp, Instagram, TikTok o formulario y nos contás tu vehículo y necesidad.</p>
+                </article>
+              </div>
+              <div class="timeline-item side-right">
+                <span class="timeline-dot"></span>
+                <article>
+                  <span>02</span>
+                  <h3>Evaluamos tu caso</h3>
+                  <p>Te orientamos sobre el tratamiento ideal según uso, nivel de protección y objetivo estético.</p>
+                </article>
+              </div>
+              <div class="timeline-item side-left">
+                <span class="timeline-dot"></span>
+                <article>
+                  <span>03</span>
+                  <h3>Ejecutamos el servicio</h3>
+                  <p>Aplicamos técnicas premium con seguimiento real, materiales de calidad y foco absoluto en terminación.</p>
+                </article>
+              </div>
+              <div class="timeline-item side-right">
+                <span class="timeline-dot"></span>
+                <article>
+                  <span>04</span>
+                  <h3>Entregamos y acompañamos</h3>
+                  <p>Explicamos el resultado, recomendaciones de mantenimiento y próximos pasos si tu auto lo necesita.</p>
+                </article>
+              </div>
             </div>
           </div>
         </section>

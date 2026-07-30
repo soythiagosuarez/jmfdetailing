@@ -56,3 +56,81 @@ if (leadForm) {
     if(formSuccess){ formSuccess.hidden = false; formSuccess.textContent = '¡Gracias! Tu consulta quedó registrada para la demo. Conectá un endpoint real para recibir leads automáticamente.'; }
   });
 }
+
+/* ============ SCROLL REVEAL + STAGGER ============ */
+(function () {
+  var REVEAL_SEL = [
+    '.section-heading',
+    '.service-card',
+    '.split-copy',
+    '.split-media-card',
+    '.reel-card',
+    '.reels-center',
+    '.timeline-item',
+    '.reason-grid > div:first-child',
+    '.reason-list article',
+    '.testimonial-card',
+    '.accordion details',
+    '.contact-copy',
+    '.contact-form',
+    '.footer-grid > div'
+  ].join(',');
+
+  var root = document.documentElement;
+  var items = Array.prototype.slice.call(document.querySelectorAll(REVEAL_SEL));
+  if (!items.length) return;
+
+  // Sin reduced-motion-guard o sin soporte de IO -> mostrar todo de una
+  if (!root.classList.contains('reveal-ready') || !('IntersectionObserver' in window)) {
+    items.forEach(function (el) { el.classList.add('is-visible'); });
+    return;
+  }
+
+  // Stagger: los elementos que comparten padre (una grilla) entran en cascada
+  var counters = new Map();
+  items.forEach(function (el) {
+    var parent = el.parentElement;
+    var i = counters.get(parent) || 0;
+    counters.set(parent, i + 1);
+    el.style.setProperty('--reveal-delay', Math.min(i * 80, 400) + 'ms');
+  });
+
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        io.unobserve(entry.target); // one-shot: no se vuelve a ocultar
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
+
+  items.forEach(function (el) { io.observe(el); });
+})();
+
+/* ============ REELS · reproducir sólo cuando están en pantalla ============ */
+(function () {
+  var reels = Array.prototype.slice.call(document.querySelectorAll('.reel-video'));
+  if (!reels.length) return;
+
+  reels.forEach(function (v) { v.muted = true; }); // asegura autoplay-policy
+
+  if (!('IntersectionObserver' in window)) {
+    reels.forEach(function (v) { v.play().catch(function () {}); });
+    return;
+  }
+
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      var v = entry.target;
+      if (entry.isIntersecting) { v.play().catch(function () {}); }
+      else { v.pause(); }
+    });
+  }, { threshold: 0.25 });
+
+  reels.forEach(function (v) { io.observe(v); });
+
+  // Pausa todo si la pestaña pasa a segundo plano (ahorra CPU/batería)
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) reels.forEach(function (v) { v.pause(); });
+  });
+})();
