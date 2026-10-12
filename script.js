@@ -44,18 +44,53 @@ if (testimonialGrid) {
   observer.observe(testimonialGrid);
 }
 
+/* ============ FORMULARIO DE CONTACTO → CRM (Consultas web) ============ */
 const leadForm = document.getElementById('leadForm');
 const formSuccess = document.getElementById('formSuccess');
+const formError = document.getElementById('formError');
+const leadSubmit = document.getElementById('leadSubmit');
 if (leadForm) {
+  const mostrar = (el, texto) => { if (el) { el.textContent = texto; el.hidden = !texto; } };
   leadForm.addEventListener('submit', async (event) => {
     event.preventDefault();
-    const formData = new FormData(leadForm);
-    const payload = Object.fromEntries(formData.entries());
-    trackEvent('submit_form_lead', { service: payload.service || 'unknown' });
-    leadForm.reset();
-    if(formSuccess){ formSuccess.hidden = false; formSuccess.textContent = '¡Gracias! Tu consulta quedó registrada para la demo. Conectá un endpoint real para recibir leads automáticamente.'; }
+    mostrar(formSuccess, ''); mostrar(formError, '');
+    if (!leadForm.checkValidity()) {
+      mostrar(formError, 'Completá nombre, WhatsApp, email y el servicio que te interesa.');
+      return;
+    }
+    const payload = Object.fromEntries(new FormData(leadForm).entries());
+    const textoBoton = leadSubmit ? leadSubmit.textContent : '';
+    if (leadSubmit) { leadSubmit.disabled = true; leadSubmit.textContent = 'Enviando…'; }
+    try {
+      const respuesta = await fetch(leadForm.action, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const datos = await respuesta.json().catch(() => ({}));
+      if (!respuesta.ok || !datos.ok) throw new Error(datos.error || 'No pudimos enviar la consulta.');
+      trackEvent('submit_form_lead', { service: payload.service || 'unknown' });
+      leadForm.reset();
+      mostrar(formSuccess, '¡Gracias! Recibimos tu consulta y te escribimos por WhatsApp a la brevedad.');
+    } catch (error) {
+      mostrar(formError, (error && error.message) || 'No pudimos enviar la consulta. Probá de nuevo o escribinos por WhatsApp.');
+    } finally {
+      if (leadSubmit) { leadSubmit.disabled = false; leadSubmit.textContent = textoBoton; }
+    }
   });
 }
+
+/* ============ AGENDA ONLINE EMBEBIDA: el iframe crece con su contenido ============ */
+(function () {
+  var frame = document.getElementById('jmf-reservas');
+  if (!frame) return;
+  var origenAgenda = new URL(frame.src).origin;
+  window.addEventListener('message', function (e) {
+    if (e.origin !== origenAgenda || !e.data || e.data.tipo !== 'jmf-reserva-altura') return;
+    var altura = Number(e.data.altura);
+    if (altura > 0) frame.style.height = Math.ceil(altura) + 'px';
+  });
+})();
 
 /* ============ SCROLL REVEAL + STAGGER ============ */
 (function () {
