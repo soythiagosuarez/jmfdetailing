@@ -234,3 +234,15 @@ section#servicios {
   display:block;
   background:#0a0a0a;
 }
+
+/* ---- Agenda online embebida (CRM JMF) ---- */
+.booking-section{scroll-margin-top:90px}.booking-frame{position:relative}
+.booking-frame iframe{display:block;width:100%;min-height:760px;border:0;background:var(--bg);transition:height .2s ease}
+.booking-fallback{margin:16px 0 0;color:var(--muted-2);font-size:14px;text-align:center}
+.booking-fallback a{color:var(--red);font-weight:700}
+@media(max-width:760px){.booking-frame iframe{min-height:640px}}
+
+/* ---- Formulario de contacto: estados y campo trampa ---- */
+.form-trap{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
+.form-error{color:#fff;background:rgba(255,43,43,.08);border:1px solid rgba(255,43,43,.5);padding:14px;border-radius:14px;margin:0}
+.btn-consulta:disabled{opacity:.6;cursor:wait;transform:none}
